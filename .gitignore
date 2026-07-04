@@ -1,0 +1,80 @@
+# ==========================
+# Environment Variables
+# ==========================
+.env
+.env.*
+*.env
+
+# ==========================
+# API Keys & Credentials
+# ==========================
+credentials.json
+service-account.json
+google-credentials.json
+client_secret.json
+oauth2.json
+token.json
+
+# ==========================
+# n8n
+# ==========================
+.n8n/
+n8n.sqlite
+*.sqlite
+*.sqlite3
+
+# ==========================
+# Logs
+# ==========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ==========================
+# Node Modules
+# ==========================
+node_modules/
+
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# ==========================
+# IDE
+# ==========================
+.vscode/
+.idea/
+*.swp
+
+# ==========================
+# Operating System
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# Build Files
+# ==========================
+dist/
+build/
+
+# ==========================
+# Temporary Files
+# ==========================
+*.tmp
+*.bak
+
+# ==========================
+# Local Configuration
+# ==========================
+config.local.json
+settings.local.json
