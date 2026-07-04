@@ -149,58 +149,6 @@ The reminder workflow runs automatically at scheduled intervals.
 
 ---
 
-# 📸 Screenshots
-
-## Appointment Scheduling Workflow
-
-> Add screenshot here
-
-```
-screenshots/appointment-workflow.png
-```
-
----
-
-## Reminder Workflow
-
-> Add screenshot here
-
-```
-screenshots/reminder-workflow.png
-```
-
----
-
-## Gmail Confirmation
-
-> Add screenshot here
-
-```
-screenshots/gmail-confirmation.png
-```
-
----
-
-## WhatsApp Appointment Booking
-
-> Add screenshot here
-
-```
-screenshots/whatsapp-demo.png
-```
-
----
-
-## Google Calendar Event
-
-> Add screenshot here
-
-```
-screenshots/google-calendar.png
-```
-
----
-
 # ⚙️ Installation
 
 ## Clone Repository
