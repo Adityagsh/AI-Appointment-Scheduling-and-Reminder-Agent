@@ -109,8 +109,8 @@ AI-Appointment-Scheduling-Agent/
 │   ├── whatsapp-demo.png
 │   └── google-calendar.png
 │
-└── docs/
-    └── architecture.png
+
+    
 ```
 
 ---
