@@ -1,0 +1,633 @@
+{
+  "name": "Appointment Reminder",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1KO0V1FtV7Xc5o7I9xXHs3qdpTmrP1l6lHkxsL0rFTR8",
+          "mode": "list",
+          "cachedResultName": "AI Appointment System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KO0V1FtV7Xc5o7I9xXHs3qdpTmrP1l6lHkxsL0rFTR8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Appointments",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KO0V1FtV7Xc5o7I9xXHs3qdpTmrP1l6lHkxsL0rFTR8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        256,
+        0
+      ],
+      "id": "be9e1397-91cf-406f-86e6-b7f0e0e0e4be",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5UsbojwsZgtX1C8c",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Hospital Reminder Assistant for Sunrise Multispeciality Hospital.\n\nGenerate a friendly, professional reminder message for the patient about their upcoming appointment. The message will be sent via WhatsApp or email as plain text, so do NOT use emojis or special formatting.\n\nUse the following details:\n\nPatient Name: {{$json.Patient_Name}}\nDoctor Name: {{$json.Doctor_Name}}\nDate & Time: {{$json.Start_Time}} – {{$json.End_Time}}\n\nThe message should be concise, polite, and professional. Include:\n- A greeting\n- Appointment details (doctor, date, time)\n- A short note encouraging the patient to contact the hospital if they need to reschedule or have questions\n\nExample tone: \"Hello [Patient_Name], this is a reminder for your appointment with Dr. [Doctor_Name] on [Start_Time] – [End_Time]. We look forward to seeing you.\"\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        928,
+        0
+      ],
+      "id": "6ce4ed08-39e5-485a-a2e6-09a540d243c0",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        864,
+        192
+      ],
+      "id": "58802989-4bd0-44b3-be27-d272e8e13a5f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "ElSGOS3eRDPZPQ5x",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -128,
+        1024
+      ],
+      "id": "83826f07-5aa3-4ad9-b48b-0cabfe6d6403",
+      "name": "Telegram Trigger",
+      "webhookId": "76cf2f0d-eda2-4632-a227-e1d465c11379",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        656,
+        1248
+      ],
+      "id": "4f03ccad-1993-4b35-bdd4-8951651fb6a7",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "ElSGOS3eRDPZPQ5x",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "997850616"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        864,
+        1312
+      ],
+      "id": "2570ca6d-1d7f-4b71-84d3-be51ace492e4",
+      "name": "Simple Memory1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=🧠 AURA v3 — Intelligent Health Chat + Medical Analysis Agent\n\nYou are AURA, a smart, friendly, and professional Virtual Health Coach AI 🩺.\nYou can talk like a human health companion — answering general health questions conversationally — and also analyze any medical report or symptom in depth.\n\nYour mission is to help people understand, improve, and protect their health safely through awareness, guidance, and motivation.\n\n🩻 Your Core Skills\n\nYou can:\n\n🧾 Interpret any kind of medical report (CBC, lipid, thyroid, ECG, MRI, etc.)\n\n🤒 Understand symptoms and suggest safe lifestyle support\n\n💬 Chat naturally about general medical or wellness topics\n\n🧘 Guide on lifestyle: diet, exercise, sleep, stress, and habits\n\n⚕️ Encourage prevention and regular health monitoring\n\n⚙️ AURA’s Reasoning Flow\n\nUnderstand the input:\n\nIs it a report, symptom, or general question?\n\nDetect context automatically and respond accordingly.\n\nAnalyze deeply if medical data is provided:\n\nIdentify abnormal readings or risk indicators.\n\nExplain them clearly in non-technical terms.\n\nGive evidence-based health and lifestyle tips.\n\nAdvise when to see a doctor or repeat a test.\n\nFor general questions or wellness chats:\n\nAnswer like a knowledgeable, friendly health expert.\n\nUse clear reasoning and examples.\n\nKeep tone engaging and motivating.\n\nFor casual or educational queries:\n\nStay conversational — use friendly tone and natural flow.\n\nOffer bite-sized, actionable insights.\n\n🧾 Response Framework\n1. 🩺 If it's a Medical Report:\n\n🧍 Findings Summary: Key test results and abnormalities.\n\n🔬 Interpretation: What they mean in simple words.\n\n🥗 Lifestyle Guidance: Diet and fitness suggestions.\n\n🩻 Next Steps: Follow-up actions or further checks.\n\n🌈 Motivation: Positive reinforcement.\n\n2. 🤒 If it's Symptom-Based:\n\n📋 Symptom Overview\n\n🧩 Possible Reasons (non-diagnostic)\n\n🏃 Relief & Prevention Tips\n\n⚠️ When to Seek Help\n\n🌱 Encouragement\n\n3. 💬 If it's a General Question:\n\n💡 Clear Explanation\n\n🏃 Practical Advice / Examples\n\n🧘 Bonus Lifestyle Tip\n\n🌈 Friendly Closing\n\n4. 🧘 For Wellness or Motivation Chats:\n\n✨ Acknowledge user’s goal\n\n✅ Give simple, science-based advice\n\n💬 Add one motivational insight or daily habit\n\n🗣️ Tone and Style\n\nFriendly, empathetic, and encouraging 😊\n\nConversational and human — not robotic\n\nUse emojis and bullet points for easy reading\n\nAlways professional and supportive\n\n⚠️ Safety Rules\n\nNever diagnose or prescribe medicines.\n\nAvoid giving dosage or treatment plans.\n\nAlways recommend consulting a certified doctor for exact diagnosis or prescription.\n\nFocus on safe lifestyle and preventive advice.\n\n🩺 Patient / User Input\n\n\"{{ $json.text }}\"\n\n🧠 Example Behaviors\n\nExample 1 — Report Input:\n\nHemoglobin 9.5 g/dL, MCV low, Platelets normal\n✅ Explains anemia, suggests iron-rich foods, hydration, follow-up with doctor.\n\nExample 2 — Symptom Input:\n\nI feel constant fatigue and body aches.\n✅ Suggests possible reasons (low vitamins, stress, thyroid), gives daily routine, asks for lab results.\n\nExample 3 — General Question:\n\nIs skipping breakfast unhealthy?\n✅ Explains pros and cons, mentions metabolism, offers balanced breakfast ideas.\n\nExample 4 — Chat Mode:\n\nHow can I stay consistent with workouts?\n✅ Responds conversationally with motivation and habit-building tips.",
+        "options": {}
+      },
+      "name": "AI Agent2",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        656,
+        1008
+      ],
+      "id": "dde827b2-7952-47d4-9044-136f96cdbe94",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "997850616",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1344,
+        1024
+      ],
+      "id": "bcfb439a-abde-460f-99de-7c13cad8aac3",
+      "name": "Send a text message",
+      "webhookId": "5fe6bdd3-f17e-41bb-9f96-00d06e5ab03c",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.photo[2].file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        336,
+        1136
+      ],
+      "id": "f2604e94-ece0-401c-b808-4bcad14bbd1a",
+      "name": "Get a file",
+      "webhookId": "010e7771-b299-469b-9cee-626baceb4181",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "function escapeMarkdownV2(text) {\n  // Escape all special characters\n  return text.replace(/([_*\\[\\]()~>#+\\-=|{}.!])/g, '\\\\$1');\n}\n\nconst aiOutput = $json[\"output\"];\nconst escapedText = escapeMarkdownV2(aiOutput);\n\n// Optional: Split into chunks under 4000 chars\nconst maxLength = 4000;\nlet messages = [];\nfor (let i = 0; i < escapedText.length; i += maxLength) {\n  messages.push({ json: { text: escapedText.slice(i, i + maxLength) } });\n}\n\nreturn messages;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        1024
+      ],
+      "id": "aeca6c61-8c6f-4382-be92-b391d33c35f0",
+      "name": "Code in JavaScript",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d7b801ba-ab8d-4d07-92ef-e5ba725056b7",
+              "leftValue": "",
+              "rightValue": "={{ $json.message.text }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        1024
+      ],
+      "id": "cd0ae98f-6e92-4712-b0b7-872a25f77056",
+      "name": "If",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code in JavaScript2').item.json.Patient_Email }}",
+        "subject": "Appointment Reminder",
+        "message": "={{ $json.text }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1296,
+        0
+      ],
+      "id": "706a6f5b-2b9f-4a0f-bfa2-6e2bf6beecc5",
+      "name": "Send a message",
+      "webhookId": "a3fbe662-d2d0-4786-80be-1e4769441a06",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "WYalyUu2IDbX6y3L",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const appointments = items.map(item => {\n  // interpret Start_Time as IST\n  const startTimeIST = new Date(`${item.json.Start_Time} GMT+0530`);\n  \n  // subtract 2 hours (still in IST)\n  const reminderTimeIST = new Date(startTimeIST.getTime() - 2 * 60 * 60 * 1000);\n\n  // current time (in IST)\n  const currentTimeIST = new Date(\n    new Date().toLocaleString(\"en-US\", { timeZone: \"Asia/Kolkata\" })\n  );\n\n  return {\n    json: {\n      ...item.json,\n      startTime: startTimeIST.toISOString(),       // for system logic\n      reminderTime: reminderTimeIST.toISOString(), // for logic comparison\n      currentTime: currentTimeIST.toISOString(),   // for logic comparison\n      startTimeIST: startTimeIST.toLocaleString(\"en-IN\", { timeZone: \"Asia/Kolkata\" }),\n      reminderTimeIST: reminderTimeIST.toLocaleString(\"en-IN\", { timeZone: \"Asia/Kolkata\" }),\n      currentTimeIST: currentTimeIST.toLocaleString(\"en-IN\", { timeZone: \"Asia/Kolkata\" }),\n    },\n  };\n});\n\nreturn appointments;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        0
+      ],
+      "id": "cb075c1e-68a9-4cf0-a93f-3442c7d60db1",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date(); // current UTC time\nconst nowIST = new Date(now.getTime() + 5.5 * 60 * 60 * 1000); // convert to IST\n\nconst results = [];\nfor (const item of items) {\n  const remind = new Date(item.json.reminderTime);\n  const start = new Date(item.json.startTime);\n\n  // Convert both to IST\n  const remindIST = new Date(remind.getTime() + 5.5 * 60 * 60 * 1000);\n  const startIST = new Date(start.getTime() + 5.5 * 60 * 60 * 1000);\n\n  // Trigger if current time is after or equal to reminder time AND before appointment start\n  const shouldSend =\n    nowIST >= remindIST && nowIST < startIST &&\n    (!item.json.Reminder_Status || item.json.Reminder_Status.trim() === \"\");\n\n  if (shouldSend) {\n    results.push({\n      json: {\n        ...item.json,\n        sendReminder: true,\n        currentTimeIST: nowIST.toLocaleString(\"en-IN\", { timeZone: \"Asia/Kolkata\" })\n      }\n    });\n  }\n}\n\n// Return only reminders that need to be sent\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "1cf53681-6610-478c-bfd5-0e5741f11986",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1KO0V1FtV7Xc5o7I9xXHs3qdpTmrP1l6lHkxsL0rFTR8",
+          "mode": "list",
+          "cachedResultName": "AI Appointment System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KO0V1FtV7Xc5o7I9xXHs3qdpTmrP1l6lHkxsL0rFTR8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Appointments",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1KO0V1FtV7Xc5o7I9xXHs3qdpTmrP1l6lHkxsL0rFTR8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Reminder_Status": "Reminder Sent ✅",
+            "Event_ID": "={{ $('Code in JavaScript2').item.json.Event_ID }}",
+            "Patient_Email": "={{ $('Code in JavaScript2').item.json.Patient_Email }}"
+          },
+          "matchingColumns": [
+            "Patient_Email"
+          ],
+          "schema": [
+            {
+              "id": "Doctor_Name",
+              "displayName": "Doctor_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Patient_Name",
+              "displayName": "Patient_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Patient_Email",
+              "displayName": "Patient_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Patient_Phone",
+              "displayName": "Patient_Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Start_Time",
+              "displayName": "Start_Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "End_Time",
+              "displayName": "End_Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Event_ID",
+              "displayName": "Event_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reminder_Status",
+              "displayName": "Reminder_Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1472,
+        0
+      ],
+      "id": "073b5ee0-e6e8-4dec-86c3-6ce9a173fe55",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5UsbojwsZgtX1C8c",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "10b1f2a4-b882-4132-8705-85d2c660fa5a",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "from": "+16814774286",
+        "to": "={{ '+91' + $('Code in JavaScript2').item.json.Patient_Phone }}",
+        "message": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        1296,
+        224
+      ],
+      "id": "334fe047-77fe-47ec-85d3-c9b4c3dba039",
+      "name": "Send an SMS/MMS/WhatsApp message",
+      "credentials": {
+        "twilioApi": {
+          "id": "fNvuHN59Y5FwADQP",
+          "name": "Twilio account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "34c5e374-fc24-4a8c-b0f4-13e41b57275c",
+  "meta": {
+    "instanceId": "55a8c61299fa76ffba55984e01df4b9c6a672c40075051aa8518d5d69c444397"
+  },
+  "id": "O9IYNbHfkMR2ezCU",
+  "tags": []
+}
