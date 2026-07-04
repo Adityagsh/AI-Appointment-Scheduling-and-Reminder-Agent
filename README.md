@@ -149,22 +149,6 @@ The reminder workflow runs automatically at scheduled intervals.
 
 ---
 
-# ⚙️ Installation
-
-## Clone Repository
-
-```bash
-git clone https://github.com/Adityagsh/AI-Appointment-Scheduling-Agent.git
-```
-
-Move into the project directory.
-
-```bash
-cd AI-Appointment-Scheduling-Agent
-```
-
----
-
 ## Import Workflows
 
 Import the following workflows into your n8n workspace.
